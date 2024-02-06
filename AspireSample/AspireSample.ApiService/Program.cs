@@ -24,7 +24,9 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 app.UseExceptionHandler();
 
-app.MapGet("/weatherforecast", async (IWeatherClient weatherClient, CancellationToken cancellationToken) =>
+app.MapGet("/weatherforecast", async (
+    IWeatherClient weatherClient,
+    CancellationToken cancellationToken) =>
 {
     var forecast = await weatherClient.GetWeatherForecastAsync("new york", cancellationToken);
     return forecast;
@@ -33,6 +35,7 @@ app.MapGet("/weatherforecast", async (IWeatherClient weatherClient, Cancellation
 app.MapDefaultEndpoints();
 
 app.Run();
+
 public record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);

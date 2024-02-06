@@ -4,18 +4,24 @@ namespace AspireSample.ApiService;
 
 public interface IWeatherClient
 {
-    Task<WeatherForecast[]> GetWeatherForecastAsync(string city, CancellationToken cancellationToken = default);
+    Task<WeatherForecast[]> GetWeatherForecastAsync(
+        string city,
+        CancellationToken cancellationToken = default);
 }
 
-internal sealed class WeatherClient(HttpClient httpClient): IWeatherClient
+internal sealed class WeatherClient(HttpClient httpClient) : IWeatherClient
 {
-    public async Task<WeatherForecast[]> GetWeatherForecastAsync(string city, CancellationToken cancellationToken = default)
+    public async Task<WeatherForecast[]> GetWeatherForecastAsync(
+        string city,
+        CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(city);
 
         string escapedCityString = Uri.EscapeDataString(city);
 
-        var requestUri = new Uri($"v4/weather/forecast?location={escapedCityString}&timesteps=1d&units=metric", UriKind.Relative);
+        var requestUri = new Uri(
+            $"v4/weather/forecast?location={escapedCityString}&timesteps=1d&units=metric",
+            UriKind.Relative);
 
         var response = await httpClient.GetFromJsonAsync<TomorrowWeatherForecast>(
             requestUri,
@@ -23,7 +29,10 @@ internal sealed class WeatherClient(HttpClient httpClient): IWeatherClient
 
         return response is not null
             ? response.Timelines.Daily
-                .Select(x => new WeatherForecast(DateOnly.FromDateTime(x.Time), (int)x.Values.TemperatureAvg, "Mild"))
+                .Select(x => new WeatherForecast(
+                    DateOnly.FromDateTime(x.Time),
+                    (int)x.Values.TemperatureAvg,
+                    "Mild"))
                 .ToArray()
             : [];
     }
