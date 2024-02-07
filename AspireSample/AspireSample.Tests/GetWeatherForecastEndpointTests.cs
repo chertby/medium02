@@ -2,12 +2,13 @@ using System.Net;
 
 namespace AspireSample.Tests;
 
-public sealed class GetWeatherForecastEndpointTests(ApiServiceFixture fixture) : IClassFixture<ApiServiceFixture>
+public sealed class GetWeatherForecastEndpointTests(ApiServiceFixture fixture)
+    : IClassFixture<ApiServiceFixture>
 {
     private readonly HttpClient _httpClient = fixture.CreateClient();
 
     [Fact]
-    public async Task GetWeatherForecast_When()
+    public async Task GetWeatherForecast_ShouldReturnsOk()
     {
         // Arrange
         var requestUri = new Uri("weatherforecast", UriKind.Relative);
